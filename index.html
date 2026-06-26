@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="icon" href="https://i.ibb.co/wh1LT1Zb/IMG-20260626-174534.png" type="image/png"/>
 <title>ClyraPlay</title>
 <style>
     @font-face {
@@ -81,6 +82,19 @@
       flex-direction: column;
       align-items: stretch;
       gap: 10px;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      object-fit: cover;
     }
 
     .brand {
@@ -176,7 +190,7 @@
       position: relative;
       flex: 0 0 164px;
       width: 164px;
-      height: 275px; /* Altura aumentada en móvil para bajar el botón */
+      height: 275px; 
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 22px;
@@ -198,7 +212,7 @@
     }
 
     .app-body {
-      padding: 12px 12px 10px; /* Reducido espacio inferior para empujar el botón más abajo */
+      padding: 12px 12px 10px; 
       display: flex;
       flex-direction: column;
       gap: 2px;
@@ -278,7 +292,7 @@
       .app-card {
         flex-basis: 172px;
         width: 172px;
-        height: 260px; /* Reducido para evitar grandes espacios vacíos */
+        height: 260px; 
       }
       .app-image {
         height: 118px;
@@ -388,12 +402,10 @@
       -webkit-overflow-scrolling: touch;
       width: 100%;
       max-width: 100vw;
-      /* Oculta la barra de desplazamiento en Firefox e IE/Edge */
       scrollbar-width: none;
       -ms-overflow-style: none;
     }
 
-    /* Oculta la barra de desplazamiento en navegadores WebKit (Chrome, Safari, etc.) */
     .detail-overlay::-webkit-scrollbar {
       display: none;
     }
@@ -462,7 +474,7 @@
       margin: 0 auto;
       flex: 1;
       box-sizing: border-box;
-      overflow-x: visible; /* Cambiado a visible para permitir que el botón estire sin cortarse */
+      overflow-x: visible; 
     }
 
     .detail-main > div,
@@ -671,9 +683,15 @@
         padding: 20px 32px;
       }
 
+      .brand-logo {
+        width: 36px;
+        height: 36px;
+      }
+
       .topbar-row {
         flex-direction: row;
         align-items: center;
+        justify-content: space-between;
         gap: 18px;
         max-width: 1320px;
         margin: 0 auto;
@@ -686,11 +704,13 @@
 
       .search-box {
         margin-top: 0;
-        flex: 1;
+        flex: 0 1 560px;
+        width: 100%;
         max-width: 560px;
         padding: 14px 18px;
         font-size: 16px;
         border-radius: 18px;
+        margin-left: auto;
       }
 
       .content {
@@ -724,7 +744,7 @@
         width: auto;
         max-width: 250px;
         min-width: 190px;
-        height: 245px; /* Reducido drásticamente para quitar el espacio en la parte superior */
+        height: 245px; 
       }
 
       .app-image {
@@ -791,7 +811,7 @@
       .detail-hero img {
         height: auto;
         max-height: 480px;
-        object-fit: contain; /* Esto previene el recorte y mantiene su forma original */
+        object-fit: contain; 
       }
 
       .detail-main > div:nth-child(2) {
@@ -831,22 +851,21 @@
         font-size: 15px;
       }
 
-      /* Modificación específica para el botón en escritorio */
       .detail-download {
         position: static;
         grid-area: download;
         width: 100%;
-        max-width: 400px; /* Tamaño máximo fijo */
-        margin-left: auto; /* Centrado correcto */
-        margin-right: auto; /* Centrado correcto */
+        max-width: 400px; 
+        margin-left: auto; 
+        margin-right: auto; 
         transform: none;
         left: auto;
         bottom: auto;
-        justify-self: center; /* Asegura el centrado en el grid */
+        justify-self: center; 
         align-self: center;
         padding: 16px 22px;
         font-size: 16px;
-        border-radius: 18px; /* Bordes redondeados */
+        border-radius: 18px; 
       }
 
       .modal-box {
@@ -978,6 +997,7 @@
       .topbar-row {
         flex-direction: row;
         align-items: center;
+        justify-content: space-between;
         gap: 12px;
       }
 
@@ -991,6 +1011,7 @@
         padding: 10px 12px;
         font-size: 14px;
         border-radius: 14px;
+        margin-left: auto;
       }
 
       .content {
@@ -1103,9 +1124,15 @@
     .desktop-device .topbar-row {
       flex-direction: row;
       align-items: center;
+      justify-content: space-between;
       gap: 18px;
       max-width: 1320px;
       margin: 0 auto;
+    }
+
+    .desktop-device .brand-logo {
+      width: 36px;
+      height: 36px;
     }
 
     .desktop-device .brand {
@@ -1115,11 +1142,13 @@
 
     .desktop-device .search-box {
       margin-top: 0;
-      flex: 1;
+      flex: 0 1 560px;
+      width: 100%;
       max-width: 560px;
       padding: 14px 18px;
       font-size: 16px;
       border-radius: 18px;
+      margin-left: auto;
     }
 
     .desktop-device .content {
@@ -1258,19 +1287,18 @@
       min-width: 170px;
     }
 
-    /* Modificación específica para el botón forzado en escritorio */
     .desktop-device .detail-download {
       position: static;
       width: 100%;
       min-width: 0;
-      max-width: 400px; /* Tamaño máximo fijo */
+      max-width: 400px; 
       margin-left: auto;
       margin-right: auto;
       left: auto;
       transform: none;
       right: auto;
       bottom: auto;
-      justify-self: center; /* Asegura el centrado en el grid */
+      justify-self: center; 
       align-self: center;
       padding: 16px 22px;
       font-size: 16px;
@@ -1371,7 +1399,10 @@
 <div class="app">
   <header class="topbar">
     <div class="topbar-row">
-      <div class="brand">ClyraPlay</div>
+      <div class="brand-container">
+        <img alt="ClyraPlay Logo" class="brand-logo" src="https://i.ibb.co/wh1LT1Zb/IMG-20260626-174534.png"/>
+        <div class="brand">ClyraPlay</div>
+      </div>
       <input aria-label="Buscar aplicaciones" class="search-box" id="searchInput" placeholder="Buscar aplicaciones..." type="search"/>
     </div>
   </header>
@@ -1821,9 +1852,8 @@
       document.body.classList.add('desktop-device');
     }
 
-
     const adsterraUrl = 'https://www.effectivecpmnetwork.com/pebktxz1?key=28ccb1c2d5f2bc6691f2610c6b05f11e';
-    const omg10Url = 'https://omg10.com/4/11019975';
+    const omg10Url = 'https://omg10.com/4/11205348';
     const adUrls = [adsterraUrl, omg10Url];
     const defaultDirectLink = 'https://www.mediafire.com/file/ejemplo/archivo.zip/file';
 
