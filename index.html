@@ -88,6 +88,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      margin-left: 8px; /* Ajuste para alinear con el contenido inferior */
     }
 
     .brand-logo {
@@ -184,6 +185,24 @@
     .apps-row::-webkit-scrollbar-thumb {
       background: rgba(134, 247, 210, 0.32);
       border-radius: 999px;
+    }
+
+    /* GRID DE BÚSQUEDA (Vertical) */
+    .apps-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, 1fr); /* 2 columnas en móviles por espacio */
+      width: 100%;
+      padding: 2px;
+    }
+
+    .apps-grid .app-card {
+      width: 100%;
+      max-width: none;
+      min-width: 0;
+      flex: none;
+      height: 100%;
+      min-height: 245px;
     }
 
     .app-card {
@@ -296,6 +315,10 @@
       }
       .app-image {
         height: 118px;
+      }
+      .apps-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
       }
     }
   
@@ -697,6 +720,10 @@
         margin: 0 auto;
       }
 
+      .brand-container {
+        margin-left: 0; /* En PC se alinea por su contenedor */
+      }
+
       .brand {
         font-size: 28px;
         white-space: nowrap;
@@ -737,6 +764,12 @@
         flex-wrap: wrap;
         gap: 16px;
         padding: 2px 0 0;
+      }
+
+      /* 6 COLUMNAS EN RESULTADOS DE BÚSQUEDA PARA PC */
+      .apps-grid {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 16px;
       }
 
       .app-card {
@@ -1130,6 +1163,8 @@
       margin: 0 auto;
     }
 
+    .desktop-device .brand-container { margin-left: 0; }
+
     .desktop-device .brand-logo {
       width: 36px;
       height: 36px;
@@ -1184,6 +1219,12 @@
 
     .desktop-device .apps-row::-webkit-scrollbar {
       display: none;
+    }
+
+    /* GRID FORZADO A 6 COLUMNAS EN MODO ESCRITORIO */
+    .desktop-device .apps-grid {
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
     }
 
     .desktop-device .app-card {
@@ -1364,7 +1405,6 @@
       }
     }
 
-
     /* Visor a pantalla completa de las capturas (Lightbox) */
     .lightbox-overlay {
       position: fixed;
@@ -1449,6 +1489,17 @@
       <div class="apps-row" id="row-recomendadas"></div>
     </section>
 
+    <!-- SECCIÓN VERTICAL PARA BÚSQUEDA -->
+    <section class="section hidden" id="search-results-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Resultados de búsqueda</h2>
+          <p class="section-subtitle" id="search-subtitle">Aplicaciones encontradas</p>
+        </div>
+      </div>
+      <div class="apps-grid" id="search-results-grid"></div>
+    </section>
+
     <div class="empty-state" id="emptyState">No se encontraron aplicaciones con esa búsqueda.</div>
   </main>
 </div>
@@ -1510,7 +1561,7 @@
 
 <script>
     // ----------------------------------------------------------------------
-    // 1. BASE DE DATOS DE APLICACIONES (El "cajón" central de datos)
+    // 1. BASE DE DATOS DE APLICACIONES
     // ----------------------------------------------------------------------
     let appsDatabase = [
 {
@@ -1825,6 +1876,8 @@
     const searchInput = document.getElementById('searchInput');
     const emptyState = document.getElementById('emptyState');
     const contentArea = document.getElementById('content');
+    const searchSection = document.getElementById('search-results-section');
+    const searchGrid = document.getElementById('search-results-grid');
 
     const detailModal = document.getElementById('detailModal');
     const detailCloseBtn = document.getElementById('detailCloseBtn');
@@ -1863,7 +1916,7 @@
     const adsRequired = 2;
     let adsCompleted = 0;
 
-    // Función para renderizar el HTML basado en los datos
+    // Función para renderizar el HTML inicial basado en los datos
     function renderApps() {
       const rowDestacadas = document.getElementById('row-destacadas');
       const rowPc = document.getElementById('row-pc');
@@ -1910,33 +1963,56 @@
       });
 
     // ----------------------------------------------------------------------
-    // 3. LÓGICA DE BÚSQUEDA Y MODALES
+    // 3. NUEVA LÓGICA DE BÚSQUEDA (GRID VERTICAL)
     // ----------------------------------------------------------------------
     function filterCards() {
       const q = searchInput.value.trim().toLowerCase();
-      let visibleCount = 0;
-      const allRenderedCards = document.querySelectorAll('.app-card');
+      const allOriginalSections = document.querySelectorAll('.section:not(#search-results-section)');
 
-      allRenderedCards.forEach(card => {
-        const app = appsDatabase.find(a => a.id === card.dataset.id);
-        if (!app) return;
-        const haystack = `${app.name} ${app.desc}`.toLowerCase();
-        const show = !q || haystack.includes(q);
-        card.classList.toggle('hidden', !show);
-        if (show) visibleCount++;
-      });
+      if (q === '') {
+        // Restaurar vista original por categorías
+        allOriginalSections.forEach(sec => sec.style.display = 'block');
+        searchSection.classList.add('hidden');
+        emptyState.style.display = 'none';
+      } else {
+        // Ocultar vista por categorías
+        allOriginalSections.forEach(sec => sec.style.display = 'none');
+        searchSection.classList.remove('hidden');
 
-      document.querySelectorAll('.section').forEach(sec => {
-        const row = sec.querySelector('.apps-row');
-        const visibleInRow = Array.from(row.querySelectorAll('.app-card')).some(c => !c.classList.contains('hidden'));
-        sec.style.display = visibleInRow ? 'block' : 'none';
-      });
+        // Filtrar aplicaciones en base a la búsqueda
+        const filteredApps = appsDatabase.filter(app => {
+          const haystack = `${app.name} ${app.desc}`.toLowerCase();
+          return haystack.includes(q);
+        });
 
-      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+        // Mostrar resultados en el grid o mostrar mensaje vacío
+        if (filteredApps.length === 0) {
+          searchSection.classList.add('hidden');
+          searchGrid.innerHTML = '';
+          emptyState.style.display = 'block';
+        } else {
+          emptyState.style.display = 'none';
+          document.getElementById('search-subtitle').textContent = `${filteredApps.length} resultado(s) para "${q}"`;
+          
+          searchGrid.innerHTML = filteredApps.map(app => `
+            <article class="app-card" data-id="${app.id}">
+              <img alt="${app.name}" class="app-image" src="${app.image}"/>
+              <div class="app-body">
+                <h3 class="app-name">${app.name}</h3>
+                <p class="app-desc">${app.desc}</p>
+                <button class="install-btn" type="button">Ver detalles</button>
+              </div>
+            </article>
+          `).join('');
+        }
+      }
     }
 
     searchInput.addEventListener('input', filterCards);
 
+    // ----------------------------------------------------------------------
+    // 4. LÓGICA DE MODALES
+    // ----------------------------------------------------------------------
     contentArea.addEventListener('click', (e) => {
       const cardEl = e.target.closest('.app-card');
       if (!cardEl) return;
@@ -2071,7 +2147,6 @@
       }
     });
 
-    // Lógica para abrir y cerrar el Lightbox al tocar las capturas de pantalla
     detailScreenshotsTrack.addEventListener('click', (e) => {
       if (e.target.tagName === 'IMG') {
         lightboxImg.src = e.target.src;
