@@ -112,6 +112,101 @@
             color: var(--accent);
         }
 
+
+        .top-bar-right {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .download-dropdown {
+            position: relative;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 18px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all var(--transition);
+            background: var(--btn-gradient);
+            border: 1px solid #333;
+            color: #fff;
+            font: inherit;
+            font-weight: 700;
+            white-space: nowrap;
+            box-shadow: var(--shadow);
+        }
+
+        .download-btn:hover,
+        .download-btn:focus-visible {
+            background: var(--btn-active-gradient);
+            border-color: transparent;
+            box-shadow: var(--glow);
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .download-btn i.fa-chevron-down {
+            font-size: 0.8rem;
+            transition: transform var(--transition);
+        }
+
+        .download-dropdown.open .download-btn i.fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        .download-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 10px);
+            min-width: 220px;
+            background: rgba(17, 17, 17, 0.98);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
+            padding: 8px;
+            display: none;
+            overflow: hidden;
+            z-index: 200;
+            backdrop-filter: blur(10px);
+        }
+
+        .download-dropdown.open .download-menu {
+            display: block;
+        }
+
+        .download-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: #f1f1f1;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background var(--transition), transform var(--transition);
+        }
+
+        .download-option:hover,
+        .download-option:focus-visible {
+            background: rgba(255, 255, 255, 0.06);
+            outline: none;
+            transform: translateX(2px);
+        }
+
+        .download-option i {
+            color: var(--accent);
+            width: 18px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+
         /* ========== MENÚ PRINCIPAL ========== */
         .main-menu {
             display: flex;
@@ -376,6 +471,16 @@
                 height: 36px;
             }
 
+            .download-btn {
+                padding: 10px 14px;
+                gap: 8px;
+                font-size: 0.85rem;
+            }
+
+            .download-menu {
+                min-width: 200px;
+            }
+
             .main-menu {
                 flex-direction: column;
                 align-items: stretch;
@@ -440,6 +545,26 @@
             onerror="this.style.display='none';"
             >
             <span class="site-title">Clyra<span class="highlight">Play</span></span>
+        </div>
+
+        <div class="top-bar-right">
+            <div class="download-dropdown" id="downloadDropdown">
+                <button type="button" class="download-btn" id="downloadBtn" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Descargar</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="download-menu" id="downloadMenu" role="menu" aria-label="Menú de descargas">
+                    <a class="download-option" href="Descargar/Clyra.apk" download role="menuitem">
+                        <i class="fa-brands fa-android"></i>
+                        <span>Android (.apk)</span>
+                    </a>
+                    <a class="download-option" href="Descargar/ClyraPlay PC.zip" download role="menuitem">
+                        <i class="fa-brands fa-windows"></i>
+                        <span>Windows (.zip)</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -614,6 +739,35 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Menú de descargas
+            const downloadDropdown = document.getElementById('downloadDropdown');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            if (downloadDropdown && downloadBtn) {
+                const closeDownloadMenu = () => {
+                    downloadDropdown.classList.remove('open');
+                    downloadBtn.setAttribute('aria-expanded', 'false');
+                };
+
+                downloadBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isOpen = downloadDropdown.classList.toggle('open');
+                    downloadBtn.setAttribute('aria-expanded', String(isOpen));
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (!downloadDropdown.contains(e.target)) {
+                        closeDownloadMenu();
+                    }
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        closeDownloadMenu();
+                    }
+                });
+            }
+
             // Redirección de tarjetas de cómics → Cómics.html
             const comicCards = document.querySelectorAll('#comics-scroll .card');
             comicCards.forEach(card => {
