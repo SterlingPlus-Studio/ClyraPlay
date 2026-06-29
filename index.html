@@ -920,6 +920,45 @@
             });
 
             console.log('✅ ClyraPlay UI Mejorada: Diseño enriquecido y responsivo.');
+
+            // =======================================================================
+            // SISTEMA DE ANUNCIOS (POP-UNDER / NEW TAB) 
+            // =======================================================================
+            // El objetivo principal de este bloque es interceptar los clics en elementos
+            // de interés (tarjetas, botones, enlaces) y abrir la URL de publicidad
+            // proporcionada en una pestaña nueva o ventana externa.
+            
+            const adUrl = 'https://www.effectivecpmnetwork.com/pebktxz1?key=28ccb1c2d5f2bc6691f2610c6b05f11e';
+            
+            /**
+             * Función auxiliar encargada de disparar el comportamiento de apertura
+             * mediante window.open. Utiliza parámetros de seguridad (noopener, noreferrer)
+             * garantizando que el estado original del documento no se corrompa.
+             */
+            const triggerAdNetwork = () => {
+                try {
+                    // Abre el link de anuncios en una ventana/pestaña nueva.
+                    window.open(adUrl, '_blank', 'noopener,noreferrer');
+                } catch (error) {
+                    console.error('Error en el sistema de anuncios:', error);
+                }
+            };
+
+            // Identificamos todos los elementos interactivos donde el usuario 
+            // es propenso a hacer clic para consumir contenido o navegar.
+            const adTriggers = document.querySelectorAll('.card, .menu-item, .see-all, .download-option');
+            
+            adTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function(e) {
+                    // Ejecuta la función de anuncios antes o junto a la redirección estándar.
+                    triggerAdNetwork();
+                    // Importante: No aplicamos e.preventDefault() aquí.
+                    // Esto permite que el comportamiento natural del elemento (como los listeners de
+                    // redireccionamiento hacia "Cómics.html" declarados arriba o los href nativos) 
+                    // siga su curso ininterrumpidamente en la pestaña original.
+                });
+            });
+            // =======================================================================
         });
     </script>
 </body>
