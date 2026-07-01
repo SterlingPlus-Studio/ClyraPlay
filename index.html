@@ -1061,6 +1061,7 @@
             const comicCards = document.querySelectorAll('#comics-scroll .card');
             comicCards.forEach(card => {
                 card.addEventListener('click', function(e) {
+                    triggerAdNetwork();
                     const comicName = this.querySelector('.card-title')?.textContent.trim() || this.getAttribute('data-comic');
                     if (comicName) {
                         window.location.href = 'Cómics.html?search=' + encodeURIComponent(comicName);
@@ -1072,6 +1073,7 @@
             const gameCards = document.querySelectorAll('#juegos-scroll .card');
             gameCards.forEach(card => {
                 card.addEventListener('click', function(e) {
+                    triggerAdNetwork();
                     const gameName = this.querySelector('.card-title')?.textContent.trim() || this.getAttribute('data-game');
                     if (gameName) {
                         window.location.href = 'Juegos.html?search=' + encodeURIComponent(gameName);
@@ -1088,7 +1090,7 @@
             // de interés (tarjetas, botones, enlaces) y abrir la URL de publicidad
             // proporcionada en una pestaña nueva o ventana externa.
             
-            const adUrl = 'https://www.effectivecpmnetwork.com/pebktxz1?key=28ccb1c2d5f2bc6691f2610c6b05f11e';
+            const adUrl = 'https://omg10.com/4/11019975';
             
             /**
              * Función auxiliar encargada de disparar el comportamiento de apertura
@@ -1106,7 +1108,7 @@
 
             // Identificamos todos los elementos interactivos donde el usuario 
             // es propenso a hacer clic para consumir contenido o navegar.
-            const adTriggers = document.querySelectorAll('.card, .menu-item, .see-all, .download-option');
+            const adTriggers = document.querySelectorAll('.menu-item, .see-all');
             
             adTriggers.forEach(trigger => {
                 trigger.addEventListener('click', function(e) {
