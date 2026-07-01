@@ -572,6 +572,47 @@
             color: var(--text-secondary);
             font-size: 0.9rem;
             font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .social-links-footer {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .social-links-footer a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: 0.3s ease;
+        }
+
+        .social-links-footer a:hover {
+            transform: translateY(-2px);
+            background: rgba(230,57,70,0.18);
+            border-color: rgba(230,57,70,0.35);
+        }
+
+        .social-links-footer i {
+            font-size: 1.05rem;
+        }
+
+        .social-links-footer .telegram i {
+            color: #2AABEE;
+        }
+
+        .social-links-footer .tiktok i {
+            color: #fff;
         }
 
         /* ========== RESPONSIVE ========== */
@@ -986,6 +1027,16 @@
 
     <footer class="site-footer">
         <p>&copy; 2026 Sterling Plus Studio | @OnimaruDev. Todos los derechos reservados.</p>
+        <div class="social-links-footer" aria-label="Redes sociales">
+            <a class="telegram" href="https://t.me/SterlingPlus" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-telegram"></i>
+                <span>Telegram</span>
+            </a>
+            <a class="tiktok" href="https://tiktok.com/@clyraplay" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-tiktok"></i>
+                <span>TikTok</span>
+            </a>
+        </div>
     </footer>
 
     <script>
